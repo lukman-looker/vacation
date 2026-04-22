@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <title>Vacation Planner</title>
+  <meta name="theme-color" content="#4CAF50" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Vacation Planner" />
+  <meta name="description" content="Aplikasi sederhana untuk merencanakan liburan, mencatat keuangan, perlengkapan, dan pengumuman perjalanan." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Vacation Planner" />
+  <meta property="og:description" content="Catat pemasukan, pengeluaran, dan perlengkapan liburan dengan mudah dan seru!" />
+  <meta property="og:image" content="assets/img/banner.webp" />
+  <meta property="og:image:alt" content="Banner Vacation Planner" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Vacation Planner" />
+  <meta name="twitter:description" content="Catat pemasukan, pengeluaran, dan perlengkapan liburan dengan mudah dan seru!" />
+  <meta name="twitter:image" content="assets/img/banner.webp" />
+  <link rel="icon" href="assets/img/favicon/favicon.png" type="image/png" />
+  <link rel="shortcut icon" href="assets/img/favicon/favicon.png" type="image/x-icon" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon/favicon-16x16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon/favicon-32x32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/img/favicon/android-chrome-192x192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/img/favicon/android-chrome-512x512.png" />
+  <link rel="manifest" href="assets/img/favicon/site.webmanifest" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="vacation-header">
+      <div class="sun"></div>
+      <div class="cloud a"></div>
+      <div class="cloud b"></div>
+      <div class="main-title text-cartoon">VACATION MODE ON 🌴<br>krewakk..</div>
+      <div class="bg-shape">
+        <div class="tree" style="width:30px; height:40px; animation-delay: 0s;"></div>
+        <div class="tree" style="width:40px; height:50px; animation-delay: -5s;"></div>
+        <div class="tree" style="width:25px; height:35px; animation-delay: -9s;"></div>
+      </div>
+      <div class="road"></div>
+      <div class="car">
+        <div class="car-body">
+          <div class="window"></div>
+          <div class="window right"></div>
+        </div>
+        <div class="wheel left"></div>
+        <div class="wheel right"></div>
+        <div class="smoke"></div>
+      </div>
+    </div>
+    <section class="card">
+      <h2 class="card-title text-green"><i class="fas fa-wallet"></i> Keuangan</h2>
+      <div class="form-group">
+        <select id="tipe" class="form-control">
+          <option value="masuk">PEMASUKAN</option>
+          <option value="keluar">PENGELUARAN</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <input type="text" id="ket" class="form-control" placeholder="Keterangan">
+      </div>
+      <div class="form-group">
+        <input type="number" id="nominal" class="form-control" placeholder="Nominal Rp">
+      </div>
+      <div class="form-group relative">
+        <input type="text" id="kategori" class="form-control" placeholder="Kategori" oninput="showSuggestions(this.value)">
+        <div id="suggestions" class="suggestion-box hidden"></div>
+      </div>
+      <button id="btnSimpanTrx" onclick="simpanTransaksi()" class="btn btn-primary">
+        <i class="fas fa-plus-circle"></i> TAMBAH DATA </button>
+      <div class="summary-grid">
+        <div class="summary-item bg-green">
+          <p class="label"><i class="fas fa-arrow-down"></i> Masuk</p>
+          <p id="totalMasuk" class="value">Rp<br>0</p>
+        </div>
+        <div class="summary-item bg-red">
+          <p class="label"><i class="fas fa-arrow-up"></i> Keluar</p>
+          <p id="totalKeluar" class="value">Rp<br>0</p>
+        </div>
+        <div class="summary-item bg-blue">
+          <p class="label"><i class="fas fa-coins"></i> Sisa</p>
+          <p id="sisaSaldo" class="value">Rp<br>0</p>
+        </div>
+      </div>
+      <h3 class="sub-title"><i class="fas fa-chart-pie"></i> Kategori</h3>
+      <div id="kategoriList" class="tag-container"></div>
+      <h3 class="sub-title"><i class="fas fa-list-ul"></i> Daftar Transaksi</h3>
+      <div id="listTransaksi" class="item-list"></div>
+    </section>
+    <section class="card">
+      <h2 class="card-title text-yellow"><i class="fas fa-suitcase-rolling"></i> Perlengkapan</h2>
+      <div class="form-group">
+        <input type="text" id="namaBarang" class="form-control" placeholder="Nama Barang">
+      </div>
+      <div class="form-group">
+        <input type="text" id="yangBawa" class="form-control" placeholder="Siapa bawa? (Kosong = KAS)">
+      </div>
+      <button id="btnSimpanBarang" onclick="simpanBarang()" class="btn btn-success">
+        <i class="fas fa-box"></i> TAMBAH BARANG </button>
+      <div id="listBarang" class="item-list"></div>
+    </section>
+    <section class="card">
+      <h2 class="card-title text-purple"><i class="fas fa-bullhorn"></i> Catatan & Pengumuman</h2>
+      <div class="form-group">
+        <textarea id="isiNote" class="form-control" rows="3" placeholder="Tulis pengumuman atau catatan disini..."></textarea>
+      </div>
+      <button id="btnSimpanNote" onclick="simpanNote()" class="btn btn-purple">
+        <i class="fas fa-save"></i> SIMPAN CATATAN </button>
+      <div id="listNote" class="item-list"></div>
+    </section>
+  </div>
+  <div id="modalEdit" class="modal hidden">
+    <div class="modal-content">
+      <h3><i class="fas fa-edit"></i> Edit Data</h3>
+      <input type="hidden" id="editRow">
+      <div class="form-group">
+        <input type="text" id="editKet" class="form-control" placeholder="Keterangan">
+      </div>
+      <div class="form-group">
+        <input type="number" id="editNom" class="form-control" placeholder="Nominal">
+      </div>
+      <div class="form-group">
+        <input type="text" id="editKat" class="form-control" placeholder="Kategori">
+      </div>
+      <div class="btn-group">
+        <button onclick="updateData()" class="btn btn-primary"><i class="fas fa-check"></i> UPDATE</button>
+        <button onclick="hapusData()" class="btn btn-danger"><i class="fas fa-trash"></i> HAPUS</button>
+        <button onclick="tutupModal()" class="btn btn-secondary"><i class="fas fa-times"></i> BATAL</button>
+      </div>
+    </div>
+  </div>
+  <div id="modalEditBarang" class="modal hidden">
+    <div class="modal-content">
+      <h3><i class="fas fa-box"></i> Edit Barang</h3>
+      <input type="hidden" id="editIndexBarang">
+      <div class="form-group">
+        <input type="text" id="editNama" class="form-control" placeholder="Nama Barang">
+      </div>
+      <div class="form-group">
+        <input type="text" id="editOrang" class="form-control" placeholder="Dibawa oleh">
+      </div>
+      <div class="btn-group">
+        <button onclick="updateBarang()" class="btn btn-primary"><i class="fas fa-check"></i> UPDATE</button>
+        <button onclick="hapusBarang()" class="btn btn-danger"><i class="fas fa-trash"></i> HAPUS</button>
+        <button onclick="tutupModalBarang()" class="btn btn-secondary"><i class="fas fa-times"></i> BATAL</button>
+      </div>
+    </div>
+  </div>
+  <div id="modalEditNote" class="modal hidden">
+    <div class="modal-content">
+      <h3><i class="fas fa-sticky-note"></i> Edit Catatan</h3>
+      <input type="hidden" id="editIndexNote">
+      <div class="form-group">
+        <textarea id="editIsi" class="form-control" rows="4" placeholder="Isi Catatan"></textarea>
+      </div>
+      <div class="btn-group">
+        <button onclick="updateNote()" class="btn btn-primary"><i class="fas fa-check"></i> UPDATE</button>
+        <button onclick="hapusNote()" class="btn btn-danger"><i class="fas fa-trash"></i> HAPUS</button>
+        <button onclick="tutupModalNote()" class="btn btn-secondary"><i class="fas fa-times"></i> BATAL</button>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="assets/js/script.js"></script>
+  <script>
+    const car = document.querySelector('.car');
+    setInterval(() => {
+      const smoke = document.createElement('div');
+      smoke.classList.add('smoke');
+      car.appendChild(smoke);
+      setTimeout(() => smoke.remove(), 1200);
+    }, 350);
+  </script>
+</body>
+
+</html>
